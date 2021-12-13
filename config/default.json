@@ -1,0 +1,11 @@
+{
+    "api":{
+        "porta":3031
+    },
+    "banco":{
+        "usuario":"root",
+        "senha":"admin",
+        "nome":"filmes",
+        "host":"127.0.0.1"
+    }
+}
