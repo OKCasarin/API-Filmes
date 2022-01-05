@@ -4,7 +4,7 @@ const Filme = require('./Filme')
 
 roteador.get('/', async (req,res)=>{
     const resultado = await Tabela.lista()
-    res.json(resultado)
+    res.status(400).json(resultado)
 })
 
 roteador.get('/:id', async (req, res)=>{
@@ -12,10 +12,10 @@ roteador.get('/:id', async (req, res)=>{
         const id = req.params.id
         const filme = new Filme({id})
         await filme.carregar()
-        res.json(filme)   
+        res.status(200).json(filme)   
     }
     catch (erro){
-        res.json({mensagem: erro.message})
+        res.status(404).json({mensagem: erro.message})
     }
 })
 
@@ -24,10 +24,10 @@ roteador.post('/',async (req, res)=>{
         const dados = req.body
         const filme = new Filme(dados)
         await filme.criar()
-        res.json(filme)
+        res.status(201).json(filme)
     }
     catch(erro){
-        res.json({mensagem: erro.message})
+        res.status(400).json({mensagem: erro.message})
     }
 })
 
@@ -39,10 +39,10 @@ roteador.put('/:id', async (req, res)=>{
         console.log(dados)
         const filme = new Filme(dados)
         await filme.atualizar()
-        res.end()
+        res.status(204).end()
     }
     catch (erro){
-        res.json({mensagem: erro.message})
+        res.status(400).json({mensagem: erro.message})
     }
 })
 
@@ -51,10 +51,10 @@ roteador.delete('/:id', async (req, res)=>{
         const id = req.params.id
         const filme = new Filme({id:id})
         filme.remover()
-        res.end()
+        res.status(204).end()
     }
     catch (erro){
-        res.json({mensagem:erro.message})
+        res.status(404).json({mensagem:erro.message})
     }
 })
 
