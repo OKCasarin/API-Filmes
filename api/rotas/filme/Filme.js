@@ -19,7 +19,7 @@ class Filme{
 
         this.validaAno = ()=>{
             const valor = this.ano
-            if(typeof valor === 'number' && valor >= 1800) {
+            if(typeof valor === 'number' && valor >= 1900) {
                 return true
             }
             return false
@@ -50,18 +50,8 @@ class Filme{
     }
 
     async criar(){
-        const campos = ['titulo','ano','diretor','produtora']
-        const validacao = {
-            'titulo':this.validaTitulo(),
-            'ano':this.validaAno(),
-            'diretor':this.validaDiretor(),
-            'produtora':this.validaProdutora()
-        }
-        const dados = {}
-        campos.forEach((campo)=>{
-            if(validacao[campo]) dados[campo]=this[campo]
-        })
-        if(dados.length=0) throw new Error('Não foram fornecidos dados de inserção válidos')
+        const dadosValidos = this.valida()
+        if(!Object.keys(dadosValidos).length) throw new Error('Não foram fornecidos dados de inserção válidos')
         const resultado = await TabelaFilme.inserir(dados)
         this.id = resultado.id
         this.dataCriacao = resultado.dataCriacao
@@ -70,24 +60,30 @@ class Filme{
     }
 
     async atualizar(){
-        const campos = ['titulo','ano','diretor','produtora']
-        const validacao = {
-            'titulo':this.validaTitulo(),
-            'ano':this.validaAno(),
-            'diretor':this.validaDiretor(),
-            'produtora':this.validaProdutora()
-        }
-        const dados = {}
-        campos.forEach((campo)=>{
-            if(validacao[campo]) dados[campo]=this[campo]
-        })
-        if(dados.length=0) throw new Error('Não foram fornecidos dados de atualização válidos')
-        await TabelaFilme.atualizar(this.id, dados)
+        const dadosValidos = this.valida()
+        console.log(Object.keys(dadosValidos).length)
+        if(!Object.keys(dadosValidos).length) throw new Error('Não foram fornecidos dados de atualização válidos')
+        await TabelaFilme.atualizar(this.id, dadosValidos)
     }
 
     async remover(){
         await TabelaFilme.buscarId(this.id)
         return await TabelaFilme.remover(this.id)
+    }
+
+    valida(){
+        const campos = ['titulo','ano','diretor','produtora']
+        const validacoes = {
+            'titulo':this.validaTitulo(),
+            'ano':this.validaAno(),
+            'diretor':this.validaDiretor(),
+            'produtora':this.validaProdutora()
+        }
+        const dadosValidos = {}
+        campos.forEach(campo=>{
+            if (validacoes[campo]) dadosValidos[campo]=this[campo]
+        })
+        return dadosValidos
     }
 }
 
