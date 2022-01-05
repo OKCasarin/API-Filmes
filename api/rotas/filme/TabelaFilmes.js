@@ -22,5 +22,10 @@ module.exports = {
                 where: {id}
             }
         )
+    },
+    remover(id){
+        return ModeloTabela.destroy({
+            where:{id:id}
+        })
     }
 }

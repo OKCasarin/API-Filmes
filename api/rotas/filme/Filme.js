@@ -84,6 +84,11 @@ class Filme{
         if(dados.length=0) throw new Error('Não foram fornecidos dados de atualização válidos')
         await TabelaFilme.atualizar(this.id, dados)
     }
+
+    async remover(){
+        await TabelaFilme.buscarId(this.id)
+        return await TabelaFilme.remover(this.id)
+    }
 }
 
 module.exports = Filme

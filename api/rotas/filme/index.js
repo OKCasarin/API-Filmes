@@ -46,4 +46,16 @@ roteador.put('/:id', async (req, res)=>{
     }
 })
 
+roteador.delete('/:id', async (req, res)=>{
+    try{
+        const id = req.params.id
+        const filme = new Filme({id:id})
+        filme.remover()
+        res.end()
+    }
+    catch (erro){
+        res.json({mensagem:erro.message})
+    }
+})
+
 module.exports = roteador
