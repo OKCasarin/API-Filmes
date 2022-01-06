@@ -1,11 +1,14 @@
 const roteador = require('express').Router()
 const Tabela = require('./TabelaFilmes')
 const Filme = require('./Filme')
-const { noExtendLeft } = require('sequelize/dist/lib/operators')
+const SerializadorFilme = require('../../Serializador').SerializadorFilme
+
 
 roteador.get('/', async (req,res)=>{
     const resultado = await Tabela.lista()
-    res.status(400).json(resultado)
+    const Serializador = new SerializadorFilme(res.getHeader('Content-Type'))
+    res.status(200)
+    res.send(Serializador.serializar(resultado))
 })
 
 roteador.get('/:id', async (req, res, next)=>{
@@ -13,7 +16,9 @@ roteador.get('/:id', async (req, res, next)=>{
         const id = req.params.id
         const filme = new Filme({id})
         await filme.carregar()
-        res.status(200).json(filme)   
+        const Serializador = new SerializadorFilme(res.getHeader('Content-Type'))
+        res.status(200)
+        res.send(Serializador.serializar(filme))  
     }
     catch (erro){
         next(erro)
@@ -25,7 +30,9 @@ roteador.post('/',async (req, res, next)=>{
         const dados = req.body
         const filme = new Filme(dados)
         await filme.criar()
-        res.status(201).json(filme)
+        const Serializador = new SerializadorFilme(res.getHeader('Content-Type'))
+        res.status(201)
+        res.send(Serializador.serializar(filme))
     }
     catch(erro){
         next(erro)

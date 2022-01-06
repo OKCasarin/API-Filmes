@@ -3,7 +3,7 @@ const ModeloTabela = require('./ModeloTabelaFilme')
 
 module.exports = {
     lista() {
-        return ModeloTabela.findAll()
+        return ModeloTabela.findAll({raw:true})
     },
     async buscarId(id){
         const encontrado = await ModeloTabela.findOne({

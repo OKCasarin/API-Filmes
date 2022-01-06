@@ -22,8 +22,17 @@ class DadosNaoFornecidos extends Error{
     }
 }
 
+class TipoNaoSuportado extends Error{
+    constructor(){
+        super('Tipo solicitado não suportado pela API')
+        this.name = 'TipoNaoSuportado'
+        this.idErro = 3
+    }
+}
+
 module.exports = {
     NaoEncontrado: NaoEncontrado,
     CampoInvalido: CampoInvalido,
-    DadosNaoFornecidos: DadosNaoFornecidos
+    DadosNaoFornecidos: DadosNaoFornecidos,
+    TipoNaoSuportado: TipoNaoSuportado
 }
