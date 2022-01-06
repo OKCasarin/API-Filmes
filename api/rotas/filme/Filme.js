@@ -1,4 +1,5 @@
 const TabelaFilme = require('./TabelaFilmes')
+const Erros = require('../../Erros')
 
 class Filme{
     constructor({id, titulo, ano, diretor, produtora, dataCriacao, dataAtualizacao, versao}){
@@ -51,8 +52,11 @@ class Filme{
 
     async criar(){
         const dadosValidos = this.valida()
-        if(!Object.keys(dadosValidos).length) throw new Error('Não foram fornecidos dados de inserção válidos')
-        const resultado = await TabelaFilme.inserir(dados)
+        const dadosEsperados = ['titulo','ano','diretor','produtora']
+        dadosEsperados.forEach(campo=>{
+            if(!dadosValidos[campo]) throw new Erros.CampoInvalido(campo)
+        })
+        const resultado = await TabelaFilme.inserir(dadosValidos)
         this.id = resultado.id
         this.dataCriacao = resultado.dataCriacao
         this.dataAtualizacao = resultado.dataAtualizacao
@@ -62,7 +66,7 @@ class Filme{
     async atualizar(){
         const dadosValidos = this.valida()
         console.log(Object.keys(dadosValidos).length)
-        if(!Object.keys(dadosValidos).length) throw new Error('Não foram fornecidos dados de atualização válidos')
+        if(!Object.keys(dadosValidos).length) throw new Erros.DadosNaoFornecidos()
         await TabelaFilme.atualizar(this.id, dadosValidos)
     }
 

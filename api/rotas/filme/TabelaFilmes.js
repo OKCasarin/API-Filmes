@@ -1,3 +1,4 @@
+const Erros = require('../../Erros')
 const ModeloTabela = require('./ModeloTabelaFilme')
 
 module.exports = {
@@ -9,7 +10,7 @@ module.exports = {
             where: {id:id}
         })
 
-        if(!encontrado) throw new Error('Filme não encontrado')
+        if(!encontrado) throw new Erros.NaoEncontrado()
         return encontrado
     },
     inserir(filme){
