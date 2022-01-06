@@ -35,8 +35,17 @@ class SerializadorFilme extends Serializador{
     }
 }
 
+class SerialiadorErros extends Serializador{
+    constructor(contentType){
+        super()
+        this.contentType = contentType
+        this.camposPublicos = ['id','mensagem']
+    }
+}
+
 module.exports = {
     tiposSuportados:['application/json'],
     Serializador:Serializador,
-    SerializadorFilme:SerializadorFilme
+    SerializadorFilme:SerializadorFilme,
+    SerialiadorErros:SerialiadorErros
 }

@@ -3,6 +3,7 @@ const config = require('config')
 const bodyParser = require('body-parser')
 const roteador = require('./rotas/filme/index')
 const tiposSuportados = require('./Serializador').tiposSuportados
+const SerializadorErros = require('./Serializador').SerialiadorErros
 
 const app = express()
 app.use(bodyParser.json())
@@ -24,8 +25,9 @@ app.use((erro, req, res, next)=>{
     else if(erro.idErro===1) status = 400
     else if(erro.idErro===2) status = 400
     else if(erro.idErro===3) status = 406
+    const Serializador = new SerializadorErros(res.getHeader('Content-Type'))
     res.status(status)
-    res.json({id:erro.idErro, mensagem:erro.message})
+    res.send(Serializador.serializar({id:erro.idErro,mensagem:erro.message}))
 })
 
 app.listen(config.get('api.porta'),(erro)=>{
